@@ -1,0 +1,10 @@
+Django==6.1.1
+djangorestframework==3.18.1
+django-cors-headers==4.9.0
+firebase-admin>=6.6,<8
+dropbox>=12.0,<13
+PyJWT[crypto]>=2.10,<3
+pillow==12.3.0
+numpy>=1.26,<3
+tensorflow-cpu>=2.16,<2.21
+opencv-python-headless>=4.10,<5

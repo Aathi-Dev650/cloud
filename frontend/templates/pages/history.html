@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CropCure AI - History</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f5f8f4;
+}
+
+/* Navigation */
+
+nav{
+    background:#2e7d32;
+    display:flex;
+    align-items:center;
+    padding:12px 20px;
+    gap:30px;
+}
+
+.logo{
+    color:#fff;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.menu{
+    display:flex;
+    gap:12px;
+}
+
+.menu a{
+    color:#fff;
+    text-decoration:none;
+    border:1px solid #fff;
+    padding:10px 18px;
+    border-radius:4px;
+    transition:.3s;
+}
+
+.menu a:hover,
+.menu a.active{
+    background:#fff;
+    color:#2e7d32;
+}
+
+/* Container */
+
+.container{
+    width:95%;
+    margin:35px auto;
+}
+
+h1{
+    color:#2e7d32;
+    margin-bottom:30px;
+    font-size:40px;
+    font-weight:500;
+}
+
+/* Summary Cards */
+
+.summary{
+    display:flex;
+    gap:15px;
+    margin-bottom:30px;
+}
+
+.card{
+    width:120px;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:6px;
+    text-align:center;
+    padding:15px;
+}
+
+.card h3{
+    font-size:16px;
+    color:#666;
+    margin-bottom:10px;
+    font-weight:normal;
+}
+
+.card h2{
+    color:#2e7d32;
+    font-size:36px;
+}
+
+/* Table */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+}
+
+th{
+    background:#edf7ed;
+    padding:15px;
+    border:1px solid #ccc;
+    text-align:left;
+}
+
+td{
+    padding:15px;
+    border:1px solid #ccc;
+}
+
+.low{
+    color:#2e7d32;
+    font-weight:bold;
+}
+
+.medium{
+    color:#ff6600;
+    font-weight:bold;
+}
+
+.high{
+    color:red;
+    font-weight:bold;
+}
+
+.view-btn{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:8px 18px;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+.view-btn:hover{
+    background:#256428;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.summary{
+    flex-direction:column;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">🌿 CropCure AI</div>
+
+<div class="menu">
+
+<a href="home.html">Home</a>
+
+<a href="detection.html">Detection</a>
+
+<a href="recommend.html">Results</a>
+
+<a href="history.html" class="active">History</a>
+
+<a href="profile.html">Profile</a>
+
+</div>
+
+</nav>
+
+<div class="container">
+
+<h1>Analysis History</h1>
+
+<div class="summary">
+
+<div class="card">
+<h3>Total Analyses</h3>
+<h2>12</h2>
+</div>
+
+<div class="card">
+<h3>This Month</h3>
+<h2>5</h2>
+</div>
+
+<div class="card">
+<h3>Resolved</h3>
+<h2>9</h2>
+</div>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Crop</th>
+<th>Disease</th>
+<th>Severity</th>
+<th>Confidence</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+<td>Jul 18, 2026</td>
+<td>Tomato</td>
+<td>Leaf Blight</td>
+<td class="medium">Medium</td>
+<td>92%</td>
+<td><button class="view-btn" onclick="viewResult('Tomato','Leaf Blight')">View</button></td>
+</tr>
+
+<tr>
+<td>Jul 15, 2026</td>
+<td>Rice</td>
+<td>Brown Spot</td>
+<td class="low">Low</td>
+<td>87%</td>
+<td><button class="view-btn" onclick="viewResult('Rice','Brown Spot')">View</button></td>
+</tr>
+
+<tr>
+<td>Jul 10, 2026</td>
+<td>Brinjal</td>
+<td>Cut Worm</td>
+<td class="high">High</td>
+<td>95%</td>
+<td><button class="view-btn" onclick="viewResult('Brinjal','Cut Worm')">View</button></td>
+</tr>
+
+<tr>
+<td>Jul 5, 2026</td>
+<td>Chilli</td>
+<td>Rot Disease</td>
+<td class="medium">Medium</td>
+<td>89%</td>
+<td><button class="view-btn" onclick="viewResult('Chilli','Rot Disease')">View</button></td>
+</tr>
+
+<tr>
+<td>Jun 28, 2026</td>
+<td>Onion</td>
+<td>Purple Blotch</td>
+<td class="low">Low</td>
+<td>82%</td>
+<td><button class="view-btn" onclick="viewResult('Onion','Purple Blotch')">View</button></td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+function viewResult(crop,disease){
+
+alert(
+"Crop : " + crop +
+"\nDisease : " + disease +
+"\n\nOpening detailed analysis..."
+);
+
+// Redirect to results page
+window.location.href="recommend.html";
+
+}
+
+</script>
+
+</body>
+</html>

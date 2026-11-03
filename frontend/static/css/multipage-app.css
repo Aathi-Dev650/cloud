@@ -1,0 +1,167 @@
+/* Shared finishing layer for the supplied CropCure multi-page interface. */
+:root {
+  --crop-green: #217a3b;
+  --crop-deep: #115c2b;
+  --crop-mint: #eaf7ed;
+  --crop-gold: #f3b842;
+  --crop-ink: #183324;
+}
+
+body {
+  background:
+    radial-gradient(circle at top right, rgba(186, 231, 191, .46), transparent 28rem),
+    linear-gradient(135deg, #f4fbf4, #eef6ed) !important;
+  color: var(--crop-ink);
+  min-height: 100vh;
+}
+
+nav {
+  background: linear-gradient(115deg, var(--crop-deep), var(--crop-green)) !important;
+  box-shadow: 0 8px 24px rgba(18, 80, 39, .2);
+}
+
+.logo {
+  letter-spacing: -.5px;
+}
+
+.menu a {
+  border-radius: 999px !important;
+  border-color: rgba(255, 255, 255, .55) !important;
+  transition: transform .18s ease, background .18s ease, color .18s ease;
+}
+
+.menu a:hover { transform: translateY(-2px); }
+
+.cropcure-banner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 26px auto 6px;
+  padding: 28px 34px;
+  border-radius: 22px;
+  color: #fff;
+  background: linear-gradient(125deg, #105d2b, #288b48 58%, #73bd6c);
+  box-shadow: 0 18px 38px rgba(20, 91, 43, .22);
+}
+
+.cropcure-banner::after {
+  content: '';
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  right: 65px;
+  top: -160px;
+  border: 34px solid rgba(255,255,255,.13);
+  border-radius: 50%;
+}
+
+.cropcure-banner h1 { margin: 7px 0; font-size: clamp(1.7rem, 3vw, 2.35rem); }
+.cropcure-banner p { margin: 0; opacity: .9; font-size: 1rem; }
+.cropcure-kicker { font-size: .72rem; letter-spacing: .16em; font-weight: 700; opacity: .86; }
+.cropcure-orb {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 66px;
+  border-radius: 20px;
+  font-size: 1.8rem;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.28);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.24);
+}
+
+.container, .main-container {
+  animation: cropcure-rise .38s ease-out both;
+}
+
+.card, .profile-card, .summary .card {
+  border: 1px solid rgba(29, 104, 54, .12) !important;
+  box-shadow: 0 16px 36px rgba(31, 78, 43, .10) !important;
+}
+
+.summary .card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #fff, #f2fbf3) !important;
+}
+
+.summary .card::after {
+  content: '';
+  position: absolute;
+  right: -24px;
+  bottom: -30px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(51, 154, 75, .11);
+}
+
+.summary .card h2 { font-size: 2rem; color: var(--crop-deep) !important; }
+
+.card {
+  border-radius: 16px !important;
+}
+
+.card h2, .page-title h1 {
+  color: var(--crop-deep) !important;
+  letter-spacing: -.5px;
+}
+
+.card h3 {
+  color: var(--crop-green) !important;
+  border-left: 4px solid var(--crop-gold);
+  padding-left: 10px;
+}
+
+.card li::marker { color: var(--crop-green); }
+
+.analyze-button, .analyze, .edit-btn, .view-btn {
+  background: linear-gradient(135deg, var(--crop-deep), var(--crop-green)) !important;
+  box-shadow: 0 7px 16px rgba(26, 108, 50, .22);
+  border-radius: 10px !important;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.analyze-button:hover, .analyze:hover, .edit-btn:hover, .view-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 11px 22px rgba(26, 108, 50, .28);
+}
+
+.download, .logout-btn {
+  border-radius: 10px !important;
+}
+
+.upload-box {
+  border-radius: 16px !important;
+  border-color: rgba(33, 122, 59, .45) !important;
+  background: linear-gradient(145deg, #fbfffb, var(--crop-mint));
+}
+
+table {
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(31, 78, 43, .08);
+}
+
+thead { background: var(--crop-deep); color: #fff; }
+thead th { font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; }
+tbody td { padding-top: 16px !important; padding-bottom: 16px !important; }
+tbody tr:nth-child(even) { background: rgba(234, 247, 237, .7); }
+tbody tr:hover { background: #dff3e3; }
+
+@keyframes cropcure-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 700px) {
+  .menu { gap: 6px !important; }
+  .menu a { padding: 7px 10px !important; }
+  .card, .profile-content { padding: 20px !important; }
+  .cropcure-banner { margin: 14px 14px 0; padding: 22px; border-radius: 16px; }
+  .cropcure-orb { width: 50px; height: 50px; font-size: 1.35rem; }
+}

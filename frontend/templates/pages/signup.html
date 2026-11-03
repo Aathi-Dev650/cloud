@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="signupApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmer Sign Up</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f5f8f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.container{
+    width:450px;
+    background:#fff;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+h2{
+    text-align:center;
+    color:#2e7d32;
+    margin-bottom:25px;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+input,
+select{
+    width:100%;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:15px;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#2e7d32;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#2e7d32;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:17px;
+    transition:.3s;
+}
+
+button:hover{
+    background:#256428;
+}
+
+button:disabled{
+    background:#999;
+    cursor:not-allowed;
+}
+
+.error{
+    color:red;
+    font-size:13px;
+    margin-top:5px;
+}
+
+/* Popup */
+
+.modal{
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.5);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-box{
+    width:420px;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+}
+
+.modal-box h3{
+    text-align:center;
+    color:#2e7d32;
+    margin-bottom:20px;
+}
+
+.info{
+    margin:10px 0;
+    font-size:15px;
+}
+
+.checkbox{
+    margin:20px 0;
+}
+
+.checkbox input{
+    width:auto;
+    margin-right:10px;
+}
+
+.cancel{
+    background:#777;
+    margin-top:10px;
+}
+
+.cancel:hover{
+    background:#555;
+}
+
+</style>
+
+</head>
+
+<body ng-controller="SignupController">
+
+<div class="container">
+
+<h2>Farmer Registration</h2>
+
+<form name="signupForm" novalidate>
+
+<div class="form-group">
+<label>Full Name</label>
+
+<input
+type="text"
+name="name"
+ng-model="user.name"
+required>
+
+<div class="error"
+ng-show="signupForm.name.$touched && signupForm.name.$invalid">
+
+Name is required
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>Mobile Number</label>
+
+<input
+type="text"
+name="mobile"
+ng-model="user.mobile"
+ng-pattern="/^[6-9]\d{9}$/"
+maxlength="10"
+required>
+
+<div class="error"
+ng-show="signupForm.mobile.$touched && signupForm.mobile.$invalid">
+
+Enter a valid 10-digit mobile number.
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+ng-model="user.email"
+required>
+
+<div class="error"
+ng-show="signupForm.email.$touched && signupForm.email.$invalid">
+
+Enter a valid email.
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>District</label>
+
+<select
+ng-model="user.district"
+required>
+
+<option value="">Select District</option>
+
+<option>Chennai</option>
+<option>Coimbatore</option>
+<option>Madurai</option>
+<option>Salem</option>
+<option>Trichy</option>
+<option>Erode</option>
+<option>Tiruppur</option>
+<option>Karur</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input
+type="password"
+ng-model="user.password"
+required>
+
+</div>
+
+<button
+type="button"
+ng-click="preview()">
+
+Sign Up
+
+</button>
+
+</form>
+
+</div>
+
+<!-- Verification Popup -->
+
+<div class="modal" ng-show="showPopup">
+
+<div class="modal-box">
+
+<h3>Verify Your Details</h3>
+
+<div class="info"><b>Name :</b> {{user.name}}</div>
+
+<div class="info"><b>Mobile :</b> {{user.mobile}}</div>
+
+<div class="info"><b>Email :</b> {{user.email}}</div>
+
+<div class="info"><b>District :</b> {{user.district}}</div>
+
+<div class="checkbox">
+
+<label>
+
+<input
+type="checkbox"
+ng-model="verified">
+
+I hereby verify the above information.
+
+</label>
+
+</div>
+
+<button
+ng-click="register()"
+ng-disabled="!verified">
+
+Final Sign Up
+
+</button>
+
+<button
+class="cancel"
+ng-click="showPopup=false">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+var app = angular.module("signupApp", []);
+
+
+
+app.service("UserService", function(){
+
+    this.validateUser = function(user){
+
+        if(!user.name ||
+           !user.mobile ||
+           !user.email ||
+           !user.district ||
+           !user.password){
+
+            return false;
+        }
+
+        var mobilePattern = /^[6-9]\d{9}$/;
+
+        if(!mobilePattern.test(user.mobile)){
+            return false;
+        }
+
+        return true;
+
+    };
+
+});
+
+app.factory("UserFactory", function(){
+
+
+    var userData = {};
+
+
+    return {
+
+
+        saveUser:function(user){
+
+            userData = user;
+
+        },
+
+
+        getUser:function(){
+
+            return userData;
+
+        }
+
+
+    };
+
+
+});
+
+app.controller("SignupController",
+
+function($scope, UserService, UserFactory){
+
+
+$scope.user = {};
+
+$scope.showPopup = false;
+
+$scope.verified = false;
+
+
+
+$scope.preview = function(){
+
+
+    if(UserService.validateUser($scope.user)){
+
+
+        $scope.showPopup = true;
+
+        $scope.verified = false;
+
+
+    }
+
+    else{
+
+
+        alert("Please fill all details correctly.");
+
+    }
+
+
+};
+
+
+
+app.factory("UserFactory", function () {
+
+    return {
+
+        saveUser: function (user) {
+
+            localStorage.setItem(
+                "cropCureUser",
+                JSON.stringify(user)
+            );
+
+        },
+
+        getUser: function () {
+
+            var user = localStorage.getItem("cropCureUser");
+
+            return user ? JSON.parse(user) : null;
+
+        }
+
+    };
+
+});
+
+
+
+});
+
+
+</script>

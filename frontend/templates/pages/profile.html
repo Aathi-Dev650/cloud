@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="cropCureApp">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CropCure AI - Farmer Profile</title>
+
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f3f8f2;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        nav {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            padding: 15px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .menu {
+            display: flex;
+            gap: 25px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        .menu a:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .menu a.active {
+            background: white;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            color: #2e7d32;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #777;
+            font-size: 15px;
+        }
+
+        /* ================= PROFILE CARD ================= */
+
+        .profile-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+
+            box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+
+            max-width: 850px;
+            margin: auto;
+        }
+
+        /* ================= PROFILE HEADER ================= */
+
+        .profile-header {
+            background: linear-gradient(
+                135deg,
+                #2e7d32,
+                #43a047
+            );
+
+            padding: 35px;
+
+            display: flex;
+            align-items: center;
+            gap: 25px;
+
+            color: white;
+        }
+
+        .profile-image {
+            width: 110px;
+            height: 110px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 55px;
+
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+            flex-shrink: 0;
+        }
+
+        .profile-header h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .profile-header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+        .farmer-badge {
+            display: inline-block;
+
+            margin-top: 12px;
+
+            background: rgba(255,255,255,0.18);
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+        }
+
+        /* ================= PROFILE CONTENT ================= */
+
+        .profile-content {
+            padding: 35px;
+        }
+
+        .section-title {
+            color: #2e7d32;
+            font-size: 20px;
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .details-grid {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+        .detail-box {
+            background: #f8faf8;
+
+            padding: 18px;
+
+            border-radius: 10px;
+
+            border-left: 4px solid #43a047;
+
+            transition: 0.3s;
+        }
+
+        .detail-box:hover {
+            transform: translateY(-3px);
+
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .detail-label {
+            color: #777;
+
+            font-size: 13px;
+
+            margin-bottom: 7px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            color: #222;
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+        /* ================= FARM INFO ================= */
+
+        .farm-info {
+            margin-top: 30px;
+
+            background: #f1f8e9;
+
+            border-radius: 12px;
+
+            padding: 22px;
+
+            border: 1px solid #dcedc8;
+        }
+
+        .farm-info h3 {
+            color: #33691e;
+
+            margin-bottom: 10px;
+        }
+
+        .farm-info p {
+            color: #555;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .button-container {
+            margin-top: 30px;
+
+            display: flex;
+
+            gap: 15px;
+
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 25px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .edit-btn {
+            background: #2e7d32;
+
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #1b5e20;
+
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: #eeeeee;
+
+            color: #555;
+        }
+
+        .logout-btn:hover {
+            background: #ddd;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            text-align: center;
+
+            margin: 35px 0 20px;
+
+            color: #888;
+
+            font-size: 13px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 15px 20px;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+            .menu {
+                gap: 5px;
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+            .menu a {
+                font-size: 13px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+
+                text-align: center;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-content {
+                padding: 25px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body ng-controller="ProfileController">
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav>
+
+        <div class="logo">
+            🌿 CropCure AI
+        </div>
+
+        <div class="menu">
+
+            <a href="home.html">
+                Home
+            </a>
+
+            <a href="detection.html">
+                Detection
+            </a>
+
+            <a href="recommend.html">
+                Results
+            </a>
+
+            <a href="history.html">
+                History
+            </a>
+
+            <a href="profile.html" class="active">
+                Profile
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="main-container">
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-title">
+
+            <h1>👨‍🌾 Farmer Profile</h1>
+
+            <p>
+                Manage and view your CropCure AI account information
+            </p>
+
+        </div>
+
+
+        <!-- ================= PROFILE CARD ================= -->
+
+        <div class="profile-card">
+
+
+            <!-- PROFILE HEADER -->
+
+            <div class="profile-header">
+
+                <div class="profile-image">
+                    👨‍🌾
+                </div>
+
+                <div>
+
+                    <h2>
+                        {{user.name}}
+                    </h2>
+
+                    <p>
+                        CropCure AI Farmer
+                    </p>
+
+                    <span class="farmer-badge">
+                        🌱 Active Farmer
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= PROFILE CONTENT ================= -->
+
+            <div class="profile-content">
+
+
+                <h3 class="section-title">
+                    📋 Personal Information
+                </h3>
+
+
+                <div class="details-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Full Name
+                        </div>
+
+                        <div class="detail-value">
+                            {{user.name || 'Not provided'}}
+                        </div>
+
+                    </div>
+
+
+                    <!-- MOBILE -->
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Mobile Number
+                        </div>
+
+                        <div class="detail-value">
+                            +91 {{user.mobile || 'Not provided'}}
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Email Address
+                        </div>
+
+                        <div class="detail-value">
+                            {{user.email || 'Not provided'}}
+                        </div>
+
+                    </div>
+
+
+                    <!-- DISTRICT -->
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            District
+                        </div>
+
+                        <div class="detail-value">
+                            📍 {{user.district || 'Not provided'}}
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATE -->
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            State
+                        </div>
+
+                        <div class="detail-value">
+                            {{user.state || 'Tamil Nadu'}}
+                        </div>
+
+                    </div>
+
+
+                    <!-- CROP -->
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Preferred Crop
+                        </div>
+
+                        <div class="detail-value">
+                            🌾 {{user.crop || 'Not specified'}}
+                        </div>
+
+                    </div>
+
+
+                    <!-- MEMBER SINCE -->
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Member Since
+                        </div>
+
+                        <div class="detail-value">
+                            📅 {{user.joinDate || 'August 2026'}}
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACCOUNT STATUS -->
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Account Status
+                        </div>
+
+                        <div class="detail-value">
+                            🟢 Active
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ================= FARM INFO ================= -->
+
+                <div class="farm-info">
+
+                    <h3>
+                        🌱 About CropCure AI
+                    </h3>
+
+                    <p>
+                        CropCure AI helps farmers identify plant diseases
+                        and provides useful recommendations for healthier
+                        crops using AI-powered technology.
+                    </p>
+
+                </div>
+
+
+                <!-- ================= BUTTONS ================= -->
+
+                <div class="button-container">
+
+                    <button
+                        class="edit-btn"
+                        ng-click="editProfile()">
+
+                        ✏️ Edit Profile
+
+                    </button>
+
+
+                    <button
+                        class="logout-btn"
+                        ng-click="logout()">
+
+                        🚪 Logout
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= FOOTER ================= -->
+
+        <footer>
+
+            © 2026 CropCure AI |
+            Smart Farming for a Better Future 🌱
+
+        </footer>
+
+
+    </div>
+
+
+    <!-- ================= ANGULARJS ================= -->
+
+    <script>
+
+        var app = angular.module("cropCureApp", []);
+
+
+        /* ================= USER FACTORY ================= */
+
+        app.factory("UserFactory", function () {
+
+            return {
+
+                /* SAVE USER */
+
+                saveUser: function (user) {
+
+                    localStorage.setItem(
+                        "cropCureUser",
+                        JSON.stringify(user)
+                    );
+
+                },
+
+
+                /* GET USER */
+
+                getUser: function () {
+
+                    var user =
+                        localStorage.getItem("cropCureUser");
+
+                    if (user) {
+
+                        return JSON.parse(user);
+
+                    }
+
+                    return null;
+
+                },
+
+
+                /* CLEAR USER */
+
+                clearUser: function () {
+
+                    localStorage.removeItem(
+                        "cropCureUser"
+                    );
+
+                }
+
+            };
+
+        });
+
+
+        /* ================= PROFILE CONTROLLER ================= */
+
+        app.controller(
+            "ProfileController",
+            function ($scope, UserFactory) {
+
+
+                /* GET SIGNUP USER DATA */
+
+                $scope.user =
+                    UserFactory.getUser();
+
+
+                /* IF NO USER FOUND */
+
+                if (!$scope.user) {
+
+                    alert(
+                        "No user data found. Please sign up first."
+                    );
+
+                    window.location.href =
+                        "signup.html";
+
+                    return;
+
+                }
+
+
+                /* ================= EDIT PROFILE ================= */
+
+                $scope.editProfile = function () {
+
+                    alert(
+                        "Profile editing feature can be added here."
+                    );
+
+                };
+
+
+                /* ================= LOGOUT ================= */
+
+                $scope.logout = function () {
+
+                    var confirmLogout =
+                        confirm(
+                            "Are you sure you want to logout?"
+                        );
+
+                    if (confirmLogout) {
+
+                        UserFactory.clearUser();
+
+                        window.location.href =
+                            "home.html";
+
+                    }
+
+                };
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

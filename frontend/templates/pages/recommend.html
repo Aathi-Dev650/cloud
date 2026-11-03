@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CropCure AI - Results</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f8f3;
+}
+
+/* Navigation */
+
+nav{
+    background:#2e7d32;
+    display:flex;
+    align-items:center;
+    padding:12px 20px;
+    gap:30px;
+}
+
+.logo{
+    color:#fff;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.menu{
+    display:flex;
+    gap:10px;
+}
+
+.menu a{
+    color:#fff;
+    text-decoration:none;
+    border:1px solid #fff;
+    padding:10px 18px;
+    border-radius:4px;
+}
+
+.menu a.active,
+.menu a:hover{
+    background:#fff;
+    color:#2e7d32;
+}
+
+/* Main */
+
+.container{
+    width:95%;
+    margin:20px auto;
+}
+
+.card{
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:25px;
+}
+
+.card h2{
+    color:#2e7d32;
+    margin-bottom:15px;
+}
+
+.card h3{
+    margin-top:25px;
+    margin-bottom:12px;
+    color:#333;
+}
+
+.card p{
+    line-height:28px;
+    color:#444;
+}
+
+ul{
+    margin-left:25px;
+    line-height:34px;
+    color:#444;
+}
+
+/* Buttons */
+
+.buttons{
+    margin-top:20px;
+    display:flex;
+    gap:15px;
+}
+
+.btn{
+    padding:13px 22px;
+    border:none;
+    border-radius:5px;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.download{
+    background:white;
+    border:1px solid #2e7d32;
+    color:#2e7d32;
+}
+
+.download:hover{
+    background:#2e7d32;
+    color:white;
+}
+
+.analyze{
+    background:#2e7d32;
+    color:white;
+}
+
+.analyze:hover{
+    background:#256428;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">🌿 CropCure AI</div>
+
+    <div class="menu">
+        <a href="home.html">Home</a>
+        <a href="detection.html">Detection</a>
+        <a href="recommend.html" class="active">Results</a>
+        <a href="history.html">History</a>
+        <a href="profile.html">Profile</a>
+    </div>
+
+</nav>
+<div class="container">
+
+<div class="card">
+
+<h2>🍅 Disease Detected: Early Blight</h2>
+
+<h3>Cause</h3>
+
+<p>
+Caused by the fungal pathogen <b>Alternaria solani</b>.
+High humidity above <b>70%</b> together with temperatures between
+<b>24°C and 29°C</b> promotes rapid fungal growth and disease spread.
+</p>
+
+<h3>Symptoms</h3>
+
+<ul>
+<li>Yellow spots on leaves</li>
+<li>Brown circular lesions</li>
+<li>Wilting of younger leaves</li>
+<li>Premature leaf drop</li>
+</ul>
+
+<h3>Preventive Measures</h3>
+
+<ul>
+<li>Avoid overhead irrigation.</li>
+<li>Maintain proper spacing for air circulation.</li>
+<li>Use disease-resistant seed varieties.</li>
+<li>Follow a 3-year crop rotation schedule.</li>
+</ul>
+
+<h3>Recommended Organic Remedy</h3>
+
+<ul>
+<li>Spray Neem Oil (5 ml/L of water).</li>
+<li>Apply Trichoderma bio-fungicide.</li>
+<li>Remove infected leaves immediately.</li>
+<li>Spray once every 7 days until recovery.</li>
+</ul>
+
+</div>
+
+<div class="buttons">
+
+<button class="btn download" onclick="downloadReport()">
+📥 Download Report
+</button>
+
+<button class="btn analyze" onclick="analyzeAgain()">
+🔄 Analyze Another Plant
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+function analyzeAgain(){
+
+window.location.href="detection.html";
+
+}
+
+function downloadReport(){
+
+alert("Report Downloaded Successfully!");
+
+// Replace this with actual PDF generation later.
+
+}
+
+</script>
+
+</body>
+</html>

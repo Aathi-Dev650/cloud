@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CropCure AI Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f8f3;
+        }
+
+
+        /* =========================
+           Navigation
+        ========================= */
+
+        nav {
+            background: #2e7d32;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 30px;
+        }
+
+        .logo span {
+            font-size: 18px;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+
+        .menu {
+            display: flex;
+            gap: 10px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 10px 18px;
+            border-radius: 4px;
+            transition: .3s;
+        }
+
+        .menu a.active,
+        .menu a:hover {
+            background: white;
+            color: #2e7d32;
+        }
+
+
+        /* =========================
+           Weather Bar
+        ========================= */
+
+        .weather {
+            width: 95%;
+            margin: 15px auto;
+            background: #eef8ee;
+            border: 1px solid #b6d9b6;
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: flex;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+
+
+        /* =========================
+           Main Section
+        ========================= */
+
+        .container {
+            width: 95%;
+            margin: auto;
+            display: flex;
+            gap: 40px;
+            align-items: stretch;
+        }
+
+
+        /* =====================================================
+           ENHANCED ANALYZE PLANT CARD
+        ===================================================== */
+
+        .card {
+            width: 560px;
+            background: white;
+            border: 1px solid #d8d8d8;
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.08);
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 32px rgba(46, 125, 50, 0.15);
+            transform: translateY(-2px);
+        }
+
+
+        /* Card Heading */
+
+        .card h2 {
+            margin-bottom: 8px;
+            font-size: 30px;
+            color: #333;
+        }
+
+        .card-subtitle {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 21px;
+        }
+
+
+        /* Labels */
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            color: #333;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           Upload Area
+        ========================= */
+
+        .upload-box {
+            border: 2px dashed #81b985;
+            border-radius: 12px;
+            padding: 24px 20px;
+            text-align: center;
+            margin-bottom: 24px;
+            background: #f8fcf8;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-box:hover {
+            border-color: #2e7d32;
+            background: #f1f9f1;
+            transform: translateY(-2px);
+        }
+
+
+        /* Camera Icon */
+
+        .upload-box > span {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 8px;
+            animation: cameraFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes cameraFloat {
+
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+
+        }
+
+
+        /* Upload Heading */
+
+        .upload-title {
+            font-size: 17px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+
+        .upload-description {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+
+        /* File Input */
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            border: 1px solid #cfcfcf;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        input[type="file"]:hover {
+            border-color: #2e7d32;
+        }
+
+
+        /* =====================================================
+           PROFESSIONAL AI IMAGE PREVIEW
+        ===================================================== */
+
+        .preview-container {
+
+            position: relative;
+
+            width: 100%;
+
+            margin-top: 18px;
+
+            display: none;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            border: 3px solid #e1f0e1;
+
+            background: #eef8ee;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.12);
+
+        }
+
+
+        /* Show preview */
+
+        .preview-container.show {
+
+            display: block;
+
+            animation:
+                imageReveal 0.8s
+                cubic-bezier(0.22, 1, 0.36, 1);
+
+        }
+
+
+        /* Uploaded Image */
+
+        #preview {
+
+            width: 100%;
+
+            height: 300px;
+
+            display: block;
+
+            object-fit: cover;
+
+        }
+
+
+        /* =====================================================
+           AI SCANNING LINE
+        ===================================================== */
+
+        .scan-line {
+
+            position: absolute;
+
+            left: 0;
+
+            right: 0;
+
+            top: 0;
+
+            height: 3px;
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                #4caf50,
+                #eaffea,
+                #4caf50,
+                transparent
+            );
+
+            box-shadow:
+                0 0 8px #4caf50,
+                0 0 18px #4caf50,
+                0 0 30px rgba(76, 175, 80, 0.7);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+        }
+
+
+        /* Start AI scan */
+
+        .preview-container.show .scan-line {
+
+            animation:
+                scanPlant 1.8s
+                ease-in-out;
+
+        }
+
+
+        /* Scanning Animation */
+
+        @keyframes scanPlant {
+
+            0% {
+
+                top: 0%;
+
+                opacity: 0;
+
+            }
+
+            10% {
+
+                opacity: 1;
+
+            }
+
+            50% {
+
+                top: 50%;
+
+                opacity: 1;
+
+            }
+
+            90% {
+
+                opacity: 1;
+
+            }
+
+            100% {
+
+                top: 100%;
+
+                opacity: 0;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           IMAGE REVEAL ANIMATION
+        ===================================================== */
+
+        @keyframes imageReveal {
+
+            0% {
+
+                opacity: 0;
+
+                transform: scale(0.94);
+
+                filter: blur(6px);
+
+            }
+
+            60% {
+
+                opacity: 1;
+
+                transform: scale(1.02);
+
+                filter: blur(1px);
+
+            }
+
+            100% {
+
+                opacity: 1;
+
+                transform: scale(1);
+
+                filter: blur(0);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           AI SCAN CORNER BRACKETS
+        ===================================================== */
+
+        .scan-corner {
+
+            position: absolute;
+
+            width: 22px;
+
+            height: 22px;
+
+            border-color: #66bb6a;
+
+            border-style: solid;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            filter:
+                drop-shadow(0 0 4px #4caf50);
+
+        }
+
+
+        /* Top Left */
+
+        .top-left {
+
+            top: 12px;
+
+            left: 12px;
+
+            border-width:
+                3px 0 0 3px;
+
+        }
+
+
+        /* Top Right */
+
+        .top-right {
+
+            top: 12px;
+
+            right: 12px;
+
+            border-width:
+                3px 3px 0 0;
+
+        }
+
+
+        /* Bottom Left */
+
+        .bottom-left {
+
+            bottom: 12px;
+
+            left: 12px;
+
+            border-width:
+                0 0 3px 3px;
+
+        }
+
+
+        /* Bottom Right */
+
+        .bottom-right {
+
+            bottom: 12px;
+
+            right: 12px;
+
+            border-width:
+                0 3px 3px 0;
+
+        }
+
+
+        /* Corner Animation */
+
+        .preview-container.show .scan-corner {
+
+            animation:
+                cornerAppear 0.5s
+                ease-out forwards;
+
+            animation-delay: 0.3s;
+
+        }
+
+
+        @keyframes cornerAppear {
+
+            from {
+
+                opacity: 0;
+
+            }
+
+            to {
+
+                opacity: 1;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           AI STATUS
+        ===================================================== */
+
+        .ai-status {
+
+            position: absolute;
+
+            bottom: 12px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background: rgba(20, 80, 25, 0.88);
+
+            color: white;
+
+            padding: 6px 13px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            letter-spacing: 0.3px;
+
+            opacity: 0;
+
+            white-space: nowrap;
+
+        }
+
+
+        .preview-container.show .ai-status {
+
+            animation:
+                statusAppear 0.5s
+                ease-out forwards;
+
+            animation-delay: 0.4s;
+
+        }
+
+
+        @keyframes statusAppear {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateX(-50%)
+                    translateY(8px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateX(-50%)
+                    translateY(0);
+
+            }
+
+        }
+
+
+        /* =========================
+           Select Boxes
+        ========================= */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            margin-bottom: 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            color: #444;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #6cae70;
+        }
+
+        select:focus {
+            border-color: #2e7d32;
+            box-shadow:
+                0 0 0 3px
+                rgba(46, 125, 50, 0.12);
+        }
+
+
+        /* =========================
+           Analyze Button
+        ========================= */
+
+        .analyze-button {
+
+            width: 100%;
+
+            background: linear-gradient(
+                135deg,
+                #2e7d32,
+                #43a047
+            );
+
+            color: white;
+
+            border: none;
+
+            padding: 14px 20px;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            transition: all 0.3s ease;
+
+            box-shadow:
+                0 5px 12px
+                rgba(46, 125, 50, 0.25);
+
+        }
+
+        .analyze-button:hover {
+
+            background: linear-gradient(
+                135deg,
+                #256428,
+                #388e3c
+            );
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 18px
+                rgba(46, 125, 50, 0.3);
+
+        }
+
+        .analyze-button:active {
+
+            transform: translateY(0);
+
+        }
+
+
+        /* Small Information Text */
+
+        .privacy-text {
+
+            text-align: center;
+
+            margin-top: 12px;
+
+            color: #888;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =========================
+           Agriculture Image Section
+           UNCHANGED
+        ========================= */
+
+        .agri-image {
+
+            flex: 1;
+
+            min-height: 500px;
+
+            border-radius: 8px;
+
+            overflow: hidden;
+
+            position: relative;
+
+            background: white;
+
+            border: 1px solid #d8d8d8;
+
+        }
+
+        .agri-image img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+        }
+
+        .agri-overlay {
+
+            position: absolute;
+
+            bottom: 0;
+
+            left: 0;
+
+            right: 0;
+
+            padding: 25px;
+
+            background:
+                linear-gradient(
+                    transparent,
+                    rgba(0, 0, 0, 0.75)
+                );
+
+            color: white;
+
+        }
+
+        .agri-overlay h2 {
+
+            font-size: 28px;
+
+            margin-bottom: 8px;
+
+        }
+
+        .agri-overlay p {
+
+            font-size: 16px;
+
+            line-height: 25px;
+
+        }
+
+
+        /* =========================
+           Responsive
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .container {
+
+                flex-direction: column;
+
+            }
+
+            .card {
+
+                width: 100%;
+
+            }
+
+            .agri-image {
+
+                width: 100%;
+
+                height: 400px;
+
+                min-height: 400px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- Navigation -->
+
+    <nav>
+
+        <div class="logo">
+            🌿 CropCure AI
+        </div>
+
+        <div class="menu">
+
+            <a href="home.html">
+                Home
+            </a>
+
+            <a href="detection.html" class="active">
+                Detection
+            </a>
+
+            <a href="recommend.html">
+                Results
+            </a>
+
+            <a href="history.html">
+                History
+            </a>
+
+            <a href="profile.html">
+                Profile
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Weather Bar -->
+
+    <div class="weather">
+
+        <div>
+
+            🌡
+
+            <b id="temperature">--</b>
+
+            —
+
+            <b id="seasonWeather">--</b>
+
+        </div>
+
+        <div>
+
+            💧 Humidity:
+
+            <b id="humidity">--</b>
+
+        </div>
+
+        <div>
+
+            🌧 Rainfall:
+
+            <b id="rainfall">--</b>
+
+        </div>
+
+        <div>
+
+            💨 Wind:
+
+            <b id="wind">--</b>
+
+        </div>
+
+        <div>
+
+            📍
+
+            <b id="location">
+                Loading...
+            </b>
+
+        </div>
+
+    </div>
+
+
+    <!-- Main Section -->
+
+    <div class="container">
+
+
+        <!-- Enhanced Detection Card -->
+
+        <div class="card">
+
+            <h2>
+                Analyze Your Plant
+            </h2>
+
+            <p class="card-subtitle">
+
+                Upload a clear photo of your plant to identify
+                possible diseases and get organic treatment
+                recommendations.
+
+            </p>
+
+
+            <!-- Upload Section -->
+
+            <label>
+                📷 Upload Plant Photo
+            </label>
+
+            <div class="upload-box">
+
+                <span>
+                    📷
+                </span>
+
+                <div class="upload-title">
+
+                    Upload your plant image
+
+                </div>
+
+                <div class="upload-description">
+
+                    JPG, JPEG or PNG • Clear images give better results
+
+                </div>
+
+                <input
+                    type="file"
+                    accept="image/*"
+                    id="imageInput"
+                >
+
+
+                <!-- =========================
+                     PROFESSIONAL IMAGE PREVIEW
+                ========================== -->
+
+                <div class="preview-container">
+
+                    <img
+                        id="preview"
+                        alt="Uploaded plant preview"
+                    >
+
+
+                    <!-- AI Scan Line -->
+
+                    <div class="scan-line"></div>
+
+
+                    <!-- AI Corner Brackets -->
+
+                    <div class="scan-corner top-left"></div>
+
+                    <div class="scan-corner top-right"></div>
+
+                    <div class="scan-corner bottom-left"></div>
+
+                    <div class="scan-corner bottom-right"></div>
+
+
+                    <!-- AI Status -->
+
+                    <div class="ai-status">
+
+                        🔍 AI SCANNING PLANT...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Soil Type -->
+
+            <div class="form-group">
+
+                <label>
+                    🌱 Soil Type
+                </label>
+
+                <div class="select-wrapper">
+
+                    <select id="soil">
+
+                        <option value="">
+                            -- Select Soil Type --
+                        </option>
+
+                        <option>
+                            Red Soil
+                        </option>
+
+                        <option>
+                            Black Soil
+                        </option>
+
+                        <option>
+                            Alluvial Soil
+                        </option>
+
+                        <option>
+                            Clay Soil
+                        </option>
+
+                        <option>
+                            Sandy Soil
+                        </option>
+
+                        <option>
+                            Loamy Soil
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Weather Season -->
+
+            <div class="form-group">
+
+                <label>
+                    ☀️ Weather Season
+                </label>
+
+                <div class="select-wrapper">
+
+                    <select id="season">
+
+                        <option value="">
+                            -- Select Season --
+                        </option>
+
+                        <option>
+                            Summer
+                        </option>
+
+                        <option>
+                            Winter
+                        </option>
+
+                        <option>
+                            Monsoon
+                        </option>
+
+                        <option>
+                            Spring
+                        </option>
+
+                        <option>
+                            Autumn
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Analyze Button -->
+
+            <button
+                class="analyze-button"
+                onclick="analyzePlant()">
+
+                🔬 Analyze Plant
+
+            </button>
+
+
+            <div class="privacy-text">
+
+                🌿 Your plant information is used only for analysis
+
+            </div>
+
+        </div>
+
+
+        <!-- Agriculture Image -->
+
+        <div class="agri-image">
+
+            <img
+                src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1000&q=80"
+                alt="Green agricultural field"
+            >
+
+            <div class="agri-overlay">
+
+                <h2>
+                    🌱 Healthy Farming
+                </h2>
+
+                <p>
+
+                    Upload your plant image and let CropCure AI
+                    help identify possible diseases and recommend
+                    organic remedies for healthier crops.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+
+        /* =========================================
+           IMAGE UPLOAD + PROFESSIONAL AI SCAN
+        ========================================= */
+
+
+        const imageInput =
+            document.getElementById("imageInput");
+
+        const preview =
+            document.getElementById("preview");
+
+        const previewContainer =
+            document.querySelector(".preview-container");
+
+
+        imageInput.addEventListener(
+            "change",
+            function () {
+
+                const file =
+                    this.files[0];
+
+
+                if (file) {
+
+
+                    /* Create image preview */
+
+                    preview.src =
+                        URL.createObjectURL(file);
+
+
+                    /* Remove previous animation */
+
+                    previewContainer.classList.remove(
+                        "show"
+                    );
+
+
+                    /*
+                       Force browser to restart
+                       animation
+                    */
+
+                    void previewContainer.offsetWidth;
+
+
+                    /* Start AI animation */
+
+                    previewContainer.classList.add(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           VIEW RESULT
+        ========================================= */
+
+        function viewResult() {
+
+            window.location.href =
+                "recommend.html";
+
+        }
+
+
+        /* =========================================
+           ANALYZE PLANT
+        ========================================= */
+
+        function analyzePlant() {
+
+
+            let file =
+                imageInput.files.length;
+
+
+            let soil =
+                document.getElementById(
+                    "soil"
+                ).value;
+
+
+            let season =
+                document.getElementById(
+                    "season"
+                ).value;
+
+
+            if (file == 0) {
+
+                alert(
+                    "Please upload a plant image."
+                );
+
+                return;
+
+            }
+
+
+            if (soil == "") {
+
+                alert(
+                    "Please select soil type."
+                );
+
+                return;
+
+            }
+
+
+            if (season == "") {
+
+                alert(
+                    "Please select weather season."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Plant image submitted successfully!"
+            );
+
+
+            window.location.href =
+                "recommend.html";
+
+        }
+
+
+        /* =========================================
+           WEATHER API
+        ========================================= */
+
+        const apiKey =
+            "90df9822d2b4d14120bbe4df0eaaf0b3";
+
+
+        /* Get user's current location */
+
+        function getLocation() {
+
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(
+
+                    function (position) {
+
+                        let latitude =
+                            position.coords.latitude;
+
+                        let longitude =
+                            position.coords.longitude;
+
+
+                        getWeather(
+                            latitude,
+                            longitude
+                        );
+
+                    },
+
+
+                    function (error) {
+
+                        alert(
+                            "Please allow location access"
+                        );
+
+                    }
+
+                );
+
+            }
+
+            else {
+
+                alert(
+                    "Geolocation is not supported"
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           FETCH WEATHER
+        ========================================= */
+
+        function getWeather(lat, lon) {
+
+
+            fetch(
+
+                `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+
+            )
+
+
+            .then(
+                response =>
+                    response.json()
+            )
+
+
+            .then(
+                data => {
+
+
+                    let temp =
+                        data.main.temp;
+
+
+                    let humidity =
+                        data.main.humidity;
+
+
+                    let wind =
+                        data.wind.speed;
+
+
+                    document.getElementById(
+                        "temperature"
+                    ).innerHTML =
+
+                        temp + " °C";
+
+
+                    document.getElementById(
+                        "humidity"
+                    ).innerHTML =
+
+                        humidity + "%";
+
+
+                    document.getElementById(
+                        "wind"
+                    ).innerHTML =
+
+                        wind + " km/h";
+
+
+                    /* Dynamic location */
+
+                    document.getElementById(
+                        "location"
+                    ).innerHTML =
+
+                        data.name +
+                        ", " +
+                        data.sys.country;
+
+
+                    document.getElementById(
+                        "seasonWeather"
+                    ).innerHTML =
+
+                        getSeason();
+
+
+                    /* Rainfall */
+
+                    if (data.rain) {
+
+                        document.getElementById(
+                            "rainfall"
+                        ).innerHTML =
+
+                            data.rain["1h"] +
+                            " mm";
+
+                    }
+
+                    else {
+
+                        document.getElementById(
+                            "rainfall"
+                        ).innerHTML =
+
+                            "0 mm";
+
+                    }
+
+                }
+
+            )
+
+
+            .catch(
+
+                error => {
+
+                    console.log(error);
+
+                }
+
+            );
+
+        }
+
+
+        /* =========================================
+           SEASON CALCULATION
+        ========================================= */
+
+        function getSeason() {
+
+
+            let month =
+                new Date().getMonth() + 1;
+
+
+            if (
+                month >= 3 &&
+                month <= 5
+            )
+
+                return "Summer";
+
+
+            else if (
+                month >= 6 &&
+                month <= 9
+            )
+
+                return "Monsoon";
+
+
+            else if (
+                month >= 10 &&
+                month <= 12
+            )
+
+                return "Autumn";
+
+
+            else
+
+                return "Winter";
+
+        }
+
+
+        /* =========================================
+           START AUTOMATICALLY
+        ========================================= */
+
+        getLocation();
+
+
+    </script>
+
+
+</body>
+
+</html>

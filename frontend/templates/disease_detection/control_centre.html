@@ -1,0 +1,53 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CropCure Control Centre</title>
+  <link rel="stylesheet" href="{% static 'css/control-centre.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/home.html"><span>✦</span> CropCure <em>Control Centre</em></a>
+    <nav><a href="/home.html">Farmer app</a><a href="/admin/">Django admin</a><span>{{ request.user.username }}</span><a class="signout" href="/admin/logout/?next=/">Sign out</a></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">STAFF-ONLY OPERATIONS</p><h1>Field intelligence,<br><i>under your care.</i></h1><p>Monitor the local CropCure service, review confidence outcomes, and manage farmer access.</p></div>
+      <aside><span class="pulse"></span><strong>{% if model_available %}Model online{% else %}Model unavailable{% endif %}</strong><small>{{ model_labels|length }} supported model labels · {{ model_threshold }}% retake threshold</small></aside>
+    </section>
+
+    {% if messages %}<section class="messages">{% for message in messages %}<p class="{{ message.tags }}">{{ message }}</p>{% endfor %}</section>{% endif %}
+
+    <section class="metrics">
+      <article><span>Registered farmers</span><strong>{{ total_users }}</strong><small>{{ active_users }} currently active</small></article>
+      <article><span>Local analyses</span><strong>{{ total_analyses }}</strong><small>SQLite fallback history</small></article>
+      <article><span>Photo retakes</span><strong>{{ review_count }}</strong><small>Needs a better field photo</small></article>
+      <article><span>Model coverage</span><strong>{{ model_labels|length }}</strong><small>Deployed diagnosis classes</small></article>
+    </section>
+
+    <section class="grid">
+      <article class="panel coverage">
+        <div class="panel-heading"><div><p class="eyebrow">MODEL INVENTORY</p><h2>Current coverage</h2></div><a href="/admin/disease_detection/diseasedetection/">View records ↗</a></div>
+        {% if model_labels %}<div class="chips">{% for label in model_labels %}<span>{{ label|cut:'___'|cut:'_' }}</span>{% endfor %}</div>{% else %}<p class="empty">The model artifact or label catalogue is not available.</p>{% endif %}
+        <p class="note">Training candidates remain separate from this deployed model until they pass field validation.</p>
+      </article>
+      <article class="panel crop-panel">
+        <p class="eyebrow">LOCAL ACTIVITY</p><h2>Most analysed crops</h2>
+        {% for item in crop_summary %}<div class="crop-row"><span>{{ item.crop|title }}</span><b>{{ item.total }}</b><i style="--size: {% widthratio item.total total_analyses 100 %}%"></i></div>{% empty %}<p class="empty">No local analyses yet.</p>{% endfor %}
+      </article>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="panel-heading"><div><p class="eyebrow">LATEST LOCAL RECORDS</p><h2>Analysis queue</h2></div><a href="/admin/disease_detection/diseasedetection/">Open full records ↗</a></div>
+      <div class="table-wrap"><table><thead><tr><th>Farmer</th><th>Crop</th><th>Result</th><th>Confidence</th><th>Time</th></tr></thead><tbody>{% for record in recent_analyses %}<tr><td>{{ record.user.username }}</td><td>{{ record.crop|title }}</td><td><span class="status {{ record.status|slugify }}">{{ record.status }}</span></td><td>{{ record.confidence|floatformat:1 }}%</td><td>{{ record.detected_at|date:'d M, H:i' }}</td></tr>{% empty %}<tr><td colspan="5" class="empty">No analyses have been stored locally.</td></tr>{% endfor %}</tbody></table></div>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="panel-heading"><div><p class="eyebrow">FARMER ACCESS</p><h2>Recent accounts</h2></div><a href="/admin/auth/user/">Manage all users ↗</a></div>
+      <div class="table-wrap"><table><thead><tr><th>Farmer</th><th>District</th><th>Language</th><th>Joined</th><th>Access</th></tr></thead><tbody>{% for user in users %}<tr><td><strong>{{ user.get_full_name|default:user.username }}</strong><small>@{{ user.username }}</small></td><td>{{ user.farmer_profile.district|default:'—' }}</td><td>{{ user.farmer_profile.language|default:'English' }}</td><td>{{ user.date_joined|date:'d M Y' }}</td><td>{% if user.is_staff %}<span class="staff">Staff account</span>{% else %}<form method="post" action="{% url 'toggle-user-access' user.id %}">{% csrf_token %}<button class="access {% if user.is_active %}disable{% else %}enable{% endif %}">{% if user.is_active %}Disable{% else %}Enable{% endif %}</button></form>{% endif %}</td></tr>{% empty %}<tr><td colspan="5" class="empty">No accounts found.</td></tr>{% endfor %}</tbody></table></div>
+    </section>
+  </main>
+</body>
+</html>
