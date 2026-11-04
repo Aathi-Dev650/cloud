@@ -29,6 +29,7 @@ Open `http://127.0.0.1:8000/`. The browser loads the Auth0 SPA SDK from Auth0's 
 | `AUTH0_CALLBACK_URL` | SPA redirect URL after sign-in |
 | `AUTH0_LOGOUT_URL` | Approved return URL after sign-out |
 | `GOOGLE_APPLICATION_CREDENTIALS` | Path to Firebase service account JSON |
+| `FIREBASE_SERVICE_ACCOUNT_JSON` | Full Firebase service account JSON string (use this for Vercel environment variables) |
 | `FIRESTORE_DATABASE` | Firestore database name, normally `(default)` |
 | `DROPBOX_ACCESS_TOKEN` | Dropbox app token; do not commit it |
 | `DROPBOX_ROOT` | Root folder for saved crop photos |
